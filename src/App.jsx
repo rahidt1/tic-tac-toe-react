@@ -24,7 +24,8 @@ function App() {
   // const [activePlayer, setActivePlayer] = useState("X");
   const activePlayer = derivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  // let gameBoard = [...initialGameBoard.map((array) => [...array])];
+  let gameBoard = structuredClone(initialGameBoard);
 
   for (const turn of gameTurns) {
     // prettier-ignore
@@ -67,6 +68,10 @@ function App() {
     });
   }
 
+  function handleRestart() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -82,7 +87,9 @@ function App() {
             isActive={activePlayer === "O"}
           />
         </ol>
-        {(winner || isDraw) && <GameOver winner={winner} />}
+        {(winner || isDraw) && (
+          <GameOver winner={winner} onRestart={handleRestart} />
+        )}
         <GameBoard
           turns={gameTurns}
           onSelectSquare={handleSelectSquare}
