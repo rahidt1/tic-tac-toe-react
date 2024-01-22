@@ -4,7 +4,16 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-export function GameBoard({ onSelectSquare }) {
+export function GameBoard({ onSelectSquare, turns }) {
+  let gameBoard = initialGameBoard;
+
+  for (const turn of turns) {
+    // prettier-ignore
+    const {square:{row,col},player} = turn
+
+    gameBoard[row][col] = player;
+  }
+
   /*
   const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
@@ -22,7 +31,7 @@ export function GameBoard({ onSelectSquare }) {
 
   return (
     <ol id="game-board">
-      {initialGameBoard.map((row, rowIndex) => (
+      {gameBoard.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (

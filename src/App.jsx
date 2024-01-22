@@ -40,7 +40,7 @@ function App() {
           />
         </ol>
         <GameBoard
-          activePlayerSymbol={activePlayer}
+          turns={gameTurns}
           onSelectSquare={handleSelectSquare}
         />
       </div>
