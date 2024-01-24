@@ -22,7 +22,7 @@ function derivePlayer(gameTurns) {
 }
 
 function deriveGameBoard(gameTurns) {
-  // let gameBoard = [...initialGameBoard.map((array) => [...array])];
+  // let gameBoard = [...INITIAL_GAME_BOARD.map((array) => [...array])];
   let gameBoard = structuredClone(INITIAL_GAME_BOARD);
 
   for (const turn of gameTurns) {
