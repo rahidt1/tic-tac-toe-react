@@ -5,7 +5,9 @@ import { Log } from "./components/Log";
 import { GameOver } from "./components/GameOver";
 import { WINNING_COMBINATIONS } from "./winning-combinations.js";
 
-const initialGameBoard = [
+const PLAYERS = { X: "Player 1", O: "Player 2" };
+
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
@@ -19,14 +21,9 @@ function derivePlayer(gameTurns) {
   return currentPlayer;
 }
 
-function App() {
-  const [players, setPlayers] = useState({ X: "Player 1", O: "Player 2" });
-  const [gameTurns, setGameTurns] = useState([]);
-  // const [activePlayer, setActivePlayer] = useState("X");
-  const activePlayer = derivePlayer(gameTurns);
-
+function deriveGameBoard(gameTurns) {
   // let gameBoard = [...initialGameBoard.map((array) => [...array])];
-  let gameBoard = structuredClone(initialGameBoard);
+  let gameBoard = structuredClone(INITIAL_GAME_BOARD);
 
   for (const turn of gameTurns) {
     // prettier-ignore
@@ -34,10 +31,12 @@ function App() {
 
     gameBoard[row][col] = player;
   }
+  return gameBoard;
+}
 
-  // Check for winner
-  // Check three symbols from board using different winning combination positions. If the symbols are same, we got our winner !
-
+// Check for winner
+// Check three symbols from board using different winning combination positions. If the symbols are same, we got our winner !
+function deriveWinner(gameBoard, players) {
   let winner;
   for (const combination of WINNING_COMBINATIONS) {
     const firstSymbol = gameBoard[combination[0].row][combination[0].col];
@@ -51,6 +50,18 @@ function App() {
     )
       winner = players[firstSymbol];
   }
+  return winner;
+}
+
+function App() {
+  const [players, setPlayers] = useState(PLAYERS);
+  const [gameTurns, setGameTurns] = useState([]);
+  // const [activePlayer, setActivePlayer] = useState("X");
+  const activePlayer = derivePlayer(gameTurns);
+
+  const gameBoard = deriveGameBoard(gameTurns);
+
+  const winner = deriveWinner(gameBoard, players);
 
   // Check for draw
   const isDraw = !winner && gameTurns.length === 9; // As we have only 9 possible combinations
@@ -84,13 +95,13 @@ function App() {
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
-            initialName="Player 1"
+            initialName={PLAYERS.X}
             symbol="X"
             isActive={activePlayer === "X"}
             onPlayerNameChange={handlePlayerNameChange}
           />
           <Player
-            initialName="Player 2"
+            initialName={PLAYERS.O}
             symbol="O"
             isActive={activePlayer === "O"}
             onPlayerNameChange={handlePlayerNameChange}
